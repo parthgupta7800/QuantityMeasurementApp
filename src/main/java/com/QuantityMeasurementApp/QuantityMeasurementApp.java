@@ -64,14 +64,24 @@ public class QuantityMeasurementApp{
 
     public static void main(String[]args){
 
+    	// LENGTH EXAMPLE
+
         Quantity<LengthUnit>l1=new Quantity<>(10.0,LengthUnit.FEET);
         Quantity<LengthUnit>l2=new Quantity<>(6.0,LengthUnit.INCHES);
 
+        // Addition
+        Quantity<LengthUnit>addResult=demonstrateAddition(l1,l2);
+
+        System.out.println("Addition result: "
+                +addResult.getValue()+" "+addResult.getUnit());
+
+        // Subtraction
         Quantity<LengthUnit>subResult=demonstrateSubtraction(l1,l2);
 
         System.out.println("Subtraction result: "
                 +subResult.getValue()+" "+subResult.getUnit());
 
+        // Division
         double divisionResult=demonstrateDivision(
                 new Quantity<>(10.0,LengthUnit.FEET),
                 new Quantity<>(2.0,LengthUnit.FEET));
