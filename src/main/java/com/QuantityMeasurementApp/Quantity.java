@@ -38,6 +38,17 @@ public class Quantity<U extends IMeasurable>{
         if(targetUnit==null)
             throw new IllegalArgumentException("Target unit cannot be null");
 
+        // Special handling for TemperatureUnit (non-linear conversion)
+        if(unit instanceof TemperatureUnit && targetUnit instanceof TemperatureUnit){
+
+            TemperatureUnit from=(TemperatureUnit)unit;
+            TemperatureUnit to=(TemperatureUnit)targetUnit;
+
+            double converted=from.convertTo(value,to);
+
+            return new Quantity<>(converted,(U)to);
+        }
+
         double baseValue=unit.convertToBaseUnit(value);
         double converted=targetUnit.convertFromBaseUnit(baseValue);
 
@@ -111,6 +122,9 @@ public class Quantity<U extends IMeasurable>{
     }
 
     private double performArithmetic(Quantity<U>other,U targetUnit,ArithmeticOperation operation){
+
+        // UC14: validate operation support
+        unit.validateOperationSupport(operation.name());
 
         double thisBase=this.unit.convertToBaseUnit(this.value);
         double otherBase=other.unit.convertToBaseUnit(other.value);

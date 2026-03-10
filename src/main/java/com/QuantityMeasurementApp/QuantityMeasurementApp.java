@@ -64,28 +64,45 @@ public class QuantityMeasurementApp{
 
     public static void main(String[]args){
 
-    	// LENGTH EXAMPLE
+        // LENGTH EXAMPLE
 
         Quantity<LengthUnit>l1=new Quantity<>(10.0,LengthUnit.FEET);
         Quantity<LengthUnit>l2=new Quantity<>(6.0,LengthUnit.INCHES);
 
-        // Addition
         Quantity<LengthUnit>addResult=demonstrateAddition(l1,l2);
+        System.out.println("Addition result: "+addResult.getValue()+" "+addResult.getUnit());
 
-        System.out.println("Addition result: "
-                +addResult.getValue()+" "+addResult.getUnit());
-
-        // Subtraction
         Quantity<LengthUnit>subResult=demonstrateSubtraction(l1,l2);
+        System.out.println("Subtraction result: "+subResult.getValue()+" "+subResult.getUnit());
 
-        System.out.println("Subtraction result: "
-                +subResult.getValue()+" "+subResult.getUnit());
-
-        // Division
         double divisionResult=demonstrateDivision(
                 new Quantity<>(10.0,LengthUnit.FEET),
                 new Quantity<>(2.0,LengthUnit.FEET));
 
         System.out.println("Division result: "+divisionResult);
+
+
+        // TEMPERATURE EXAMPLE (UC14)
+
+        Quantity<TemperatureUnit>temp1=new Quantity<>(0.0,TemperatureUnit.CELSIUS);
+        Quantity<TemperatureUnit>temp2=new Quantity<>(32.0,TemperatureUnit.FAHRENHEIT);
+
+        boolean equalTemps=demonstrateEquality(temp1,temp2);
+        System.out.println("0°C equals 32°F: "+equalTemps);
+
+        Quantity<TemperatureUnit>convertedTemp=
+                demonstrateConversion(new Quantity<>(100.0,TemperatureUnit.CELSIUS),
+                        TemperatureUnit.FAHRENHEIT);
+
+        System.out.println("100°C in Fahrenheit: "
+                +convertedTemp.getValue()+" "+convertedTemp.getUnit());
+
+        // Demonstrate unsupported arithmetic
+
+        try{
+            temp1.add(new Quantity<>(50.0,TemperatureUnit.CELSIUS));
+        }catch(Exception e){
+            System.out.println("Temperature arithmetic error: "+e.getMessage());
+        }
     }
 }

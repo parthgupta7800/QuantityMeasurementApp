@@ -1,6 +1,15 @@
 package com.QuantityMeasurementApp;
 
+@FunctionalInterface
+interface SupportsArithmetic{
+    boolean isSupported();
+}
+
 public interface IMeasurable{
+
+    SupportsArithmetic supportsArithmetic=()->true;
+
+    String getUnitName();
 
     double getConversionFactor();
 
@@ -8,5 +17,11 @@ public interface IMeasurable{
 
     double convertFromBaseUnit(double baseValue);
 
-    String getUnitName();
+    default boolean supportsArithmetic(){
+        return supportsArithmetic.isSupported();
+    }
+
+    default void validateOperationSupport(String operation){
+        // default: all operations supported
+    }
 }
