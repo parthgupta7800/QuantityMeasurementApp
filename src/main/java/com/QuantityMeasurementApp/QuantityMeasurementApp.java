@@ -1,7 +1,9 @@
 package com.QuantityMeasurementApp;
 
 import com.QuantityMeasurementApp.controller.QuantityMeasurementController;
+import com.QuantityMeasurementApp.repository.IQuantityMeasurementRepository;
 import com.QuantityMeasurementApp.repository.QuantityMeasurementCacheRepository;
+import com.QuantityMeasurementApp.repository.QuantityMeasurementDatabaseRepository;
 import com.QuantityMeasurementApp.service.IQuantityMeasurementService;
 import com.QuantityMeasurementApp.service.QuantityMeasurementServiceImpl;
 import com.QuantityMeasurementApp.DTO.QuantityDTO;
@@ -11,8 +13,8 @@ public class QuantityMeasurementApp {
     public static void main(String[] args){
 
         // Repository
-        QuantityMeasurementCacheRepository repository =
-                new QuantityMeasurementCacheRepository();
+    	IQuantityMeasurementRepository repository=
+    	        new QuantityMeasurementDatabaseRepository();
 
         // Service
         IQuantityMeasurementService service =

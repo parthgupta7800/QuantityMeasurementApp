@@ -1,6 +1,7 @@
 package com.QuantityMeasurementApp.repository;
 
 import com.QuantityMeasurementApp.entity.QuantityMeasurementEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,5 +30,15 @@ public class QuantityMeasurementCacheRepository implements IQuantityMeasurementR
     @Override
     public List<QuantityMeasurementEntity> getAllMeasurements(){
         return cache;
+    }
+
+    @Override
+    public long count(){
+        return cache.size();
+    }
+
+    @Override
+    public void deleteAllMeasurements(){
+        cache.clear();
     }
 }
