@@ -1,108 +1,91 @@
 package com.QuantityMeasurementApp;
 
-public class QuantityMeasurementApp{
+import com.QuantityMeasurementApp.controller.QuantityMeasurementController;
+import com.QuantityMeasurementApp.repository.QuantityMeasurementCacheRepository;
+import com.QuantityMeasurementApp.service.IQuantityMeasurementService;
+import com.QuantityMeasurementApp.service.QuantityMeasurementServiceImpl;
+import com.QuantityMeasurementApp.DTO.QuantityDTO;
 
-    public static <U extends IMeasurable> boolean demonstrateEquality(
-            Quantity<U>quantity1,
-            Quantity<U>quantity2){
+public class QuantityMeasurementApp {
 
-        if(quantity1==null||quantity2==null)
-            throw new IllegalArgumentException("Quantity cannot be null");
+    public static void main(String[] args){
 
-        return quantity1.equals(quantity2);
-    }
+        // Repository
+        QuantityMeasurementCacheRepository repository =
+                new QuantityMeasurementCacheRepository();
 
-    public static <U extends IMeasurable> Quantity<U> demonstrateConversion(
-            Quantity<U>quantity,
-            U targetUnit){
+        // Service
+        IQuantityMeasurementService service =
+                new QuantityMeasurementServiceImpl(repository);
 
-        if(quantity==null)
-            throw new IllegalArgumentException("Quantity cannot be null");
+        // Controller
+        QuantityMeasurementController controller =
+                new QuantityMeasurementController(service);
+        
+        
 
-        if(targetUnit==null)
-            throw new IllegalArgumentException("Target unit cannot be null");
+        /* ===============================
+           Example 1: Length Equality
+        ================================= */
 
-        return quantity.convertTo(targetUnit);
-    }
+        QuantityDTO quantity1 = new QuantityDTO(
+                2,
+                "FEET",
+                "Length"
+        );
 
-    public static <U extends IMeasurable> Quantity<U> demonstrateAddition(
-            Quantity<U>quantity1,
-            Quantity<U>quantity2){
+        QuantityDTO quantity2 = new QuantityDTO(
+                24,
+                "INCHES",
+                "Length"
+        );
 
-        return quantity1.add(quantity2);
-    }
+        boolean comparisonResult =
+                controller.performComparison(quantity1,quantity2);
 
-    public static <U extends IMeasurable> Quantity<U> demonstrateAddition(
-            Quantity<U>quantity1,
-            Quantity<U>quantity2,
-            U targetUnit){
-
-        return quantity1.add(quantity2,targetUnit);
-    }
-
-    public static <U extends IMeasurable> Quantity<U> demonstrateSubtraction(
-            Quantity<U>quantity1,
-            Quantity<U>quantity2){
-
-        return quantity1.subtract(quantity2);
-    }
-
-    public static <U extends IMeasurable> Quantity<U> demonstrateSubtraction(
-            Quantity<U>quantity1,
-            Quantity<U>quantity2,
-            U targetUnit){
-
-        return quantity1.subtract(quantity2,targetUnit);
-    }
-
-    public static <U extends IMeasurable> double demonstrateDivision(
-            Quantity<U>quantity1,
-            Quantity<U>quantity2){
-
-        return quantity1.divide(quantity2);
-    }
-
-    public static void main(String[]args){
-
-        // LENGTH EXAMPLE
-
-        Quantity<LengthUnit>l1=new Quantity<>(10.0,LengthUnit.FEET);
-        Quantity<LengthUnit>l2=new Quantity<>(6.0,LengthUnit.INCHES);
-
-        Quantity<LengthUnit>addResult=demonstrateAddition(l1,l2);
-        System.out.println("Addition result: "+addResult.getValue()+" "+addResult.getUnit());
-
-        Quantity<LengthUnit>subResult=demonstrateSubtraction(l1,l2);
-        System.out.println("Subtraction result: "+subResult.getValue()+" "+subResult.getUnit());
-
-        double divisionResult=demonstrateDivision(
-                new Quantity<>(10.0,LengthUnit.FEET),
-                new Quantity<>(2.0,LengthUnit.FEET));
-
-        System.out.println("Division result: "+divisionResult);
+        System.out.println("\n--- Equality Demonstration ---");
+        System.out.println("Operation: COMPARISON");
+        System.out.println("This Quantity: "+quantity1);
+        System.out.println("That Quantity: "+quantity2);
+        System.out.println("Comparison Result: "+comparisonResult);
 
 
-        // TEMPERATURE EXAMPLE (UC14)
+        /* ===============================
+           Example 2: Temperature Conversion
+        ================================= */
 
-        Quantity<TemperatureUnit>temp1=new Quantity<>(0.0,TemperatureUnit.CELSIUS);
-        Quantity<TemperatureUnit>temp2=new Quantity<>(32.0,TemperatureUnit.FAHRENHEIT);
+        QuantityDTO temp1 = new QuantityDTO(
+                0,
+                "CELSIUS",
+                "Temperature"
+        );
 
-        boolean equalTemps=demonstrateEquality(temp1,temp2);
-        System.out.println("0°C equals 32°F: "+equalTemps);
+        QuantityDTO temp2 = new QuantityDTO(
+                0,
+                "FAHRENHEIT",
+                "Temperature"
+        );
 
-        Quantity<TemperatureUnit>convertedTemp=
-                demonstrateConversion(new Quantity<>(100.0,TemperatureUnit.CELSIUS),
-                        TemperatureUnit.FAHRENHEIT);
+        QuantityDTO conversionResult =
+                controller.performConversion(temp1,"FAHRENHEIT");
 
-        System.out.println("100°C in Fahrenheit: "
-                +convertedTemp.getValue()+" "+convertedTemp.getUnit());
+        System.out.println("\n--- Temperature Conversion ---");
+        System.out.println("Conversion Result: "+conversionResult);
 
-        // Demonstrate unsupported arithmetic
+
+        /* ===============================
+           Example 3: Temperature Addition Attempt
+        ================================= */
 
         try{
-            temp1.add(new Quantity<>(50.0,TemperatureUnit.CELSIUS));
-        }catch(Exception e){
-            System.out.println("Temperature arithmetic error: "+e.getMessage());
+
+            controller.performAddition(temp1,temp2);
+
+        }catch(Exception ex){
+
+            System.out.println("\n--- Temperature Addition Attempt ---");
+            System.out.println("Temperature addition not supported: "
+                    +ex.getMessage());
         }
     }
 }
