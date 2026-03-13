@@ -61,10 +61,17 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
 
         try{
 
-            Quantity quantity1=convertDTOToQuantity(q1);
-            Quantity quantity2=convertDTOToQuantity(q2);
+            Quantity quantity1 = convertDTOToQuantity(q1);
+            Quantity quantity2 = convertDTOToQuantity(q2);
 
-            boolean result=quantity1.equals(quantity2);
+            // Cross-category validation
+            if(!q1.getMeasurementType().equalsIgnoreCase(q2.getMeasurementType())){
+                throw new QuantityMeasurementException(
+                        "Cannot compare different measurement categories"
+                );
+            }
+
+            boolean result = quantity1.equals(quantity2);
 
             repository.save(new QuantityMeasurementEntity(
                     quantity1.toString(),

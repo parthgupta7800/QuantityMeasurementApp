@@ -1,28 +1,40 @@
 package com.QuantityMeasurementApp.entity;
 
-import java.io.Serializable;
+public class QuantityMeasurementEntity {
 
-public class QuantityMeasurementEntity implements Serializable{
-
-    private static final long serialVersionUID=1L;
-
-    public String operation;
-    public String operand1;
-    public String operand2;
-    public String result;
-    public boolean isError;
-    public String errorMessage;
+    private final String operand1;
+    private final String operand2;
+    private final String operation;
+    private final String result;
 
     public QuantityMeasurementEntity(String operand1,String operand2,String operation,String result){
         this.operand1=operand1;
         this.operand2=operand2;
         this.operation=operation;
         this.result=result;
-        this.isError=false;
     }
 
-    public QuantityMeasurementEntity(String errorMessage){
-        this.isError=true;
-        this.errorMessage=errorMessage;
+    public String getOperand1(){
+        return operand1;
+    }
+
+    public String getOperand2(){
+        return operand2;
+    }
+
+    public String getOperation(){
+        return operation;
+    }
+
+    public String getResult(){
+        return result;
+    }
+
+    @Override
+    public String toString(){
+        return "Operation: "+operation+
+                ", Operand1: "+operand1+
+                ", Operand2: "+operand2+
+                ", Result: "+result;
     }
 }
