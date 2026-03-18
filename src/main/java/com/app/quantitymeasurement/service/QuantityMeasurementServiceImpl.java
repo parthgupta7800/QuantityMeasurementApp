@@ -1,10 +1,11 @@
 package com.app.quantitymeasurement.service;
 
 import com.app.quantitymeasurement.DTO.QuantityDTO;
+import java.util.List;
+import com.app.quantitymeasurement.entity.QuantityMeasurementEntity;
 import com.app.quantitymeasurement.Quantity;
 import com.app.quantitymeasurement.units.*;
 import com.app.quantitymeasurement.exception.QuantityMeasurementException;
-import com.app.quantitymeasurement.entity.QuantityMeasurementEntity;
 import com.app.quantitymeasurement.repository.QuantityMeasurementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -191,5 +192,14 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
         }catch(Exception e){
             throw new QuantityMeasurementException(e.getMessage());
         }
+    }
+    @Override
+    public List<QuantityMeasurementEntity> getHistory(String operation){
+        return repository.findByOperation(operation);
+    }
+
+    @Override
+    public long getCount(String operation){
+        return repository.countByOperation(operation);
     }
 }

@@ -1,6 +1,8 @@
 package com.app.quantitymeasurement.controller;
 
 import com.app.quantitymeasurement.DTO.QuantityDTO;
+import java.util.List;
+import com.app.quantitymeasurement.entity.QuantityMeasurementEntity;
 import com.app.quantitymeasurement.service.IQuantityMeasurementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +38,15 @@ public class QuantityMeasurementController {
     @PostMapping("/divide")
     public double divide(@RequestBody QuantityDTO[] quantities){
         return service.divide(quantities[0],quantities[1]);
+    }
+    
+    @GetMapping("/history/{operation}")
+    public List<QuantityMeasurementEntity> getHistory(@PathVariable String operation){
+        return service.getHistory(operation);
+    }
+
+    @GetMapping("/count/{operation}")
+    public long getCount(@PathVariable String operation){
+        return service.getCount(operation);
     }
 }
