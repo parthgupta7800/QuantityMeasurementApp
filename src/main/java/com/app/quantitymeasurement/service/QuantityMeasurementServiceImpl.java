@@ -16,7 +16,7 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
     @Autowired
     private QuantityMeasurementRepository repository;
 
-    // 🔹 Convert DTO → Quantity Model
+    // Convert DTO → Quantity Model
     private Quantity convertDTOToQuantity(QuantityDTO dto){
 
         String unitName=dto.getUnit();
@@ -41,7 +41,7 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
         }
     }
 
-    // 🔹 Convert Quantity → DTO
+    // Convert Quantity → DTO
     private QuantityDTO convertQuantityToDTO(Quantity quantity){
 
         String measurementType = quantity.getUnit().getClass()
@@ -56,7 +56,7 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
         );
     }
 
-    // 🔥 COMPARE
+    // COMPARE
     @Override
     public boolean compare(QuantityDTO q1,QuantityDTO q2){
 
@@ -71,7 +71,7 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
 
             boolean result=quantity1.equals(quantity2);
 
-            // ✅ SAVE TO DB
+            // SAVE TO DB
             repository.save(new QuantityMeasurementEntity(
                     quantity1.toString(),
                     quantity2.toString(),
@@ -86,7 +86,7 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
         }
     }
 
-    // 🔥 CONVERT
+    // CONVERT
     @Override
     public QuantityDTO convert(QuantityDTO source,String targetUnit){
 
@@ -101,7 +101,7 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
 
             Quantity result=quantity.convertTo(unit);
 
-            // ✅ SAVE TO DB
+            // SAVE TO DB
             repository.save(new QuantityMeasurementEntity(
                     quantity.toString(),
                     targetUnit,
@@ -116,7 +116,7 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
         }
     }
 
-    // 🔥 ADD
+    // ADD
     @Override
     public QuantityDTO add(QuantityDTO q1,QuantityDTO q2){
 
@@ -127,7 +127,7 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
 
             Quantity result=quantity1.add(quantity2);
 
-            // ✅ SAVE TO DB
+            // SAVE TO DB
             repository.save(new QuantityMeasurementEntity(
                     quantity1.toString(),
                     quantity2.toString(),
@@ -142,7 +142,7 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
         }
     }
 
-    // 🔥 SUBTRACT
+    // SUBTRACT
     @Override
     public QuantityDTO subtract(QuantityDTO q1,QuantityDTO q2){
 
@@ -153,7 +153,7 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
 
             Quantity result=quantity1.subtract(quantity2);
 
-            // ✅ SAVE TO DB
+            // SAVE TO DB
             repository.save(new QuantityMeasurementEntity(
                     quantity1.toString(),
                     quantity2.toString(),
@@ -168,7 +168,7 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
         }
     }
 
-    // 🔥 DIVIDE
+    // DIVIDE
     @Override
     public double divide(QuantityDTO q1,QuantityDTO q2){
 
@@ -179,7 +179,7 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
 
             double result=quantity1.divide(quantity2);
 
-            // ✅ SAVE TO DB
+            // SAVE TO DB
             repository.save(new QuantityMeasurementEntity(
                     quantity1.toString(),
                     quantity2.toString(),
