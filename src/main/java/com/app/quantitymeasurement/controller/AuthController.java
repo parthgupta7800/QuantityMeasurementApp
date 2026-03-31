@@ -22,11 +22,14 @@ public class AuthController {
         this.jwtUtil=jwtUtil;
     }
 
-    // REGISTER
     @PostMapping("/register")
     public String register(@RequestBody User user){
 
-        
+        user.setEmail(user.getEmail().toLowerCase());
+
+        // Encode password
+        user.setPassword(encoder.encode(user.getPassword()));
+
         user.setProvider("LOCAL");
 
         repository.save(user);
@@ -34,14 +37,22 @@ public class AuthController {
         return "User registered successfully";
     }
 
-    // LOGIN
     @PostMapping("/login")
     public String login(@RequestBody User user){
 
-        User existing=repository.findByEmail(user.getEmail())
+        User existing=repository.findByEmail(user.getEmail().toLowerCase())
                 .orElseThrow(()->new RuntimeException("User not found"));
 
-        
+        // Check provider
+        if(!"LOCAL".equals(existing.getProvider())){
+            throw new RuntimeException("Please login using Google");
+        }
+
+        // Validate password
+        if(!encoder.matches(user.getPassword(),existing.getPassword())){
+            throw new RuntimeException("Invalid password");
+        }
+
         return jwtUtil.generateToken(existing.getEmail());
     }
 }
