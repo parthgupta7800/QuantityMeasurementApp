@@ -46,10 +46,13 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             user.setEmail(email.toLowerCase()); 
             user.setName(name);
             user.setProvider("GOOGLE");
-
+            user.setPassword(null); // IMPORTANT
             user = repository.save(user);
 
             System.out.println("USER SAVED: "+user.getEmail());
+        }
+        if(user != null && "LOCAL".equals(user.getProvider())){
+            throw new RuntimeException("User already registered with email/password");
         }
 
         // Generate JWT
