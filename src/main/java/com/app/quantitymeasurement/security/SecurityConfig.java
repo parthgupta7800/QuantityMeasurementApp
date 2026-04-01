@@ -23,22 +23,22 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-            // 🔥 Disable CSRF
+            //  Disable CSRF
             .csrf(csrf -> csrf.disable())
 
-            // 🔥 IMPORTANT: allow H2 console frames
+            // IMPORTANT: allow H2 console frames
             .headers(headers -> headers
                 .frameOptions(frame -> frame.disable())
             )
 
-            // 🔥 Return 401 instead of redirect
+            // Return 401 instead of redirect
             .exceptionHandling(ex -> ex
                 .authenticationEntryPoint((req, res, e) -> {
                     res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
                 })
             )
 
-            // 🔥 Authorization rules
+            // Authorization rules
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**").permitAll()
 
@@ -55,7 +55,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
 
-            // 🔥 OAuth login success handler
+            // OAuth login success handler
             .oauth2Login(oauth -> oauth
                 .successHandler(oAuthSuccessHandler)
             )

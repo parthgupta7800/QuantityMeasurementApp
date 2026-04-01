@@ -24,6 +24,11 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(@RequestBody User user){
+    	
+    	// Check if email already exists
+        if(repository.findByEmail(user.getEmail()).isPresent()){
+            throw new RuntimeException("Email already exists");
+        }
 
         user.setEmail(user.getEmail().toLowerCase());
 
@@ -47,6 +52,8 @@ public class AuthController {
         if(!"LOCAL".equals(existing.getProvider())){
             throw new RuntimeException("Please login using Google");
         }
+        
+        
 
         // Validate password
         if(!encoder.matches(user.getPassword(),existing.getPassword())){
