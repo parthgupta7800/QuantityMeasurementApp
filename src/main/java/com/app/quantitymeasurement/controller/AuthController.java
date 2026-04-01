@@ -5,6 +5,7 @@ import com.app.quantitymeasurement.repository.UserRepository;
 import com.app.quantitymeasurement.security.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import com.app.quantitymeasurement.DTO.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -23,18 +24,18 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody User user){
-    	
-    	// Check if email already exists
-        if(repository.findByEmail(user.getEmail()).isPresent()){
+    public String register(@RequestBody RegisterDTO dto){
+
+        String email=dto.getEmail().toLowerCase();
+
+        if(repository.findByEmail(email).isPresent()){
             throw new RuntimeException("Email already exists");
         }
 
-        user.setEmail(user.getEmail().toLowerCase());
-
-        // Encode password
-        user.setPassword(encoder.encode(user.getPassword()));
-
+        User user=new User();
+        user.setName(dto.getName());
+        user.setEmail(email);
+        user.setPassword(encoder.encode(dto.getPassword()));
         user.setProvider("LOCAL");
 
         repository.save(user);
@@ -43,20 +44,16 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User user){
+    public String login(@RequestBody LoginDTO loginDTO){
 
-        User existing=repository.findByEmail(user.getEmail().toLowerCase())
+        User existing=repository.findByEmail(loginDTO.getEmail().toLowerCase())
                 .orElseThrow(()->new RuntimeException("User not found"));
 
-        // Check provider
         if(!"LOCAL".equals(existing.getProvider())){
             throw new RuntimeException("Please login using Google");
         }
-        
-        
 
-        // Validate password
-        if(!encoder.matches(user.getPassword(),existing.getPassword())){
+        if(!encoder.matches(loginDTO.getPassword(),existing.getPassword())){
             throw new RuntimeException("Invalid password");
         }
 
