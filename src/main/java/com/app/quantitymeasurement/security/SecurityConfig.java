@@ -41,6 +41,9 @@ public class SecurityConfig {
             // Authorization rules
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**").permitAll()
+                
+                //operation available for guest user
+                .requestMatchers("/api/v1/quantities/**").permitAll()
 
                 // OAuth
                 .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
