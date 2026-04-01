@@ -18,6 +18,11 @@ public class QuantityMeasurementEntity {
 
     private LocalDateTime createdAt;
 
+    // NEW: Link with User
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    private User user;
+
     public QuantityMeasurementEntity(){}
 
     public QuantityMeasurementEntity(String operand1,String operand2,String operation,String result){
@@ -33,6 +38,7 @@ public class QuantityMeasurementEntity {
     }
 
     // getters & setters
+
     public Long getId(){ return id; }
 
     public String getOperand1(){ return operand1; }
@@ -48,4 +54,11 @@ public class QuantityMeasurementEntity {
     public void setResult(String result){ this.result=result; }
 
     public LocalDateTime getCreatedAt(){ return createdAt; }
+
+    // NEW: User getter/setter
+    public User getUser(){ return user; }
+
+    public void setUser(User user){
+        this.user=user;
+    }
 }
