@@ -28,6 +28,11 @@ public class AuthController {
 
         user.setEmail(user.getEmail().toLowerCase());
 
+        // Check if email already exists
+        if(repository.findByEmail(user.getEmail()).isPresent()){
+            throw new RuntimeException("Email already exists");
+        }
+
         // Encode password
         user.setPassword(encoder.encode(user.getPassword()));
 
